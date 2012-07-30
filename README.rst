@@ -55,8 +55,7 @@ The following settings can be set in your project's settings file.
 
 - ``MASQUERADE_REDIRECT_URL`` (default: "/"). The URL to redirect the user to after
   masquerading is activated.
-- ``MASQUERADE_REQUIRE_SUPERUSER`` (default: False). If set to true, only users
-  with both is_staff and is_superuser set to True will be allowed to use this
-  feature.
+- ``MASQUERADE_CAN_MASK`` (default: lambda u:u.is_staff). You can specify a condition, what
+  user can access to this feature.
 
 .. _mock: http://www.voidspace.org.uk/python/mock/

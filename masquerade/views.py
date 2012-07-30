@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponseForbidden
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from masquerade.forms import MaskForm
 from django.contrib.auth.models import User
@@ -49,3 +49,12 @@ def unmask(request):
         pass
 
     return HttpResponseRedirect(get_stop_redirect_url())
+
+def mask_directly(request, user_id):
+    if not MASQUERADE_CAN_MASK(request.user):
+        return HttpResponseForbidden()
+
+    user = get_object_or_404(User, pk=user_id)
+    request.session['mask_user'] = user
+    start_masquerading.send(sender='Masquerade', request=request)
+    return HttpResponseRedirect(get_start_redirect_url())

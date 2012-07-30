@@ -11,7 +11,7 @@ START_MASQUERADE_REDIRECT_VIEW = getattr(settings, 'START_MASQUERADE_REDIRECT_VI
 STOP_MASQUERADE_REDIRECT_VIEW = getattr(settings, 'STOP_MASQUERADE_REDIRECT_VIEW', None)
 
 MASQUERADE_CAN_MASK = getattr(settings,
-  'MASQUERADE_CAN_MASK', lambda u:True)
+  'MASQUERADE_CAN_MASK', lambda u:u.is_staff)
 
 def get_start_redirect_url():
     if START_MASQUERADE_REDIRECT_VIEW:

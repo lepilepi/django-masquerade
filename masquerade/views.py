@@ -10,8 +10,8 @@ from masquerade.signals import start_masquerading, stop_masquerading
 START_MASQUERADE_REDIRECT_VIEW = getattr(settings, 'START_MASQUERADE_REDIRECT_VIEW', None)
 STOP_MASQUERADE_REDIRECT_VIEW = getattr(settings, 'STOP_MASQUERADE_REDIRECT_VIEW', None)
 
-MASQUERADE_REQUIRE_SUPERUSER = getattr(settings,
-  'MASQUERADE_REQUIRE_SUPERUSER', False)
+MASQUERADE_CAN_MASK = getattr(settings,
+  'MASQUERADE_CAN_MASK', lambda u:True)
 
 def get_start_redirect_url():
     if START_MASQUERADE_REDIRECT_VIEW:
@@ -24,9 +24,7 @@ def get_stop_redirect_url():
     else: return '/'
 
 def mask(request, template_name='masquerade/mask_form.html'):
-    if not request.user.is_masked and not request.user.is_staff:
-        return HttpResponseForbidden()
-    elif not request.user.is_superuser and MASQUERADE_REQUIRE_SUPERUSER:
+    if not MASQUERADE_CAN_MASK(request.user):
         return HttpResponseForbidden()
 
     if request.method == 'POST':

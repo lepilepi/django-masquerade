@@ -55,6 +55,6 @@ def mask_directly(request, user_id):
         return HttpResponseForbidden()
 
     user = get_object_or_404(User, pk=user_id)
-    request.session['mask_user'] = user
+    request.session['mask_user'] = user.username
     start_masquerading.send(sender='Masquerade', request=request)
     return HttpResponseRedirect(get_start_redirect_url())
